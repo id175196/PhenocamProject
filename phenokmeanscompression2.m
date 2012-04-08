@@ -1,4 +1,4 @@
-function [imgs,kmat,kresults] = phenokmeanscompression2(indir,outdir,...
+function [imgs,kmat,kresults,entres] = phenokmeanscompression2(indir,outdir,...
         windowsize,sttime,endtime,threshold,numclusters,numpics,...
         compression,sampledata)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -256,7 +256,7 @@ skip = 1;
 if(windowsize ~= 0)
     skip = 2*windowsize;
 end
-
+names = {};
 for n=start:skip:max_doy;
     if kindex <= (numpics-1)*size(mask,3) + 1;
         % if windowsize = 0, just compute for data on that same day
@@ -290,11 +290,13 @@ for n=start:skip:max_doy;
         gccmatn = gccmat(gccmat(:,3) == 1,:);
         if size(gccmatn,1) > 0;
             gccmatn = sortrows(gccmatn, 1);
+            names{picsadded} = subset(gccmatn(ceil(size(gccmatn,1)*.9),2),:);
             tempimg = imread(subset(gccmatn(ceil(size(gccmatn,1)*.9),2),:));
             imgs(:,:,:,picsadded) = tempimg;
             s1 = size(tempimg,1);
             s2 = size(tempimg,2);
-            subplot(floor(sqrt(numpics)), ceil(sqrt(numpics)) + 1, picsadded); imagesc(tempimg); title(subset(gccmatn(ceil(size(gccmatn,1)*.9),2),:))
+            subplot(floor(sqrt(numpics)), ceil(sqrt(numpics)) + 1, picsadded); imagesc(tempimg);
+            %title(subset(gccmatn(ceil(size(gccmatn,1)*.9),2),:))
             
             % make sure images have same dimesnsions
             if s1 ~= size(mask,1) || s2 ~= size(mask,2)  
@@ -325,8 +327,10 @@ end
 
 %this is currently under construction.  Any one of the following
 %implementations work, but I am trying to improve the results.
+entres = getEntropies(names);
 
-rowsize = ceil(numclusters/2);
+%rowsize = ceil(numclusters/2);
+
 figure('Name', 'City distances')
 if nargin == 10;
     kresults = kmeans(kmat, numclusters, 'EmptyAction', 'singleton', 'distance', 'city', 'start', sampledata);
@@ -337,6 +341,7 @@ kresults = reshape(kresults,size(img,2)/compression,size(img,1)/compression);
 kresults = fliplr(kresults);
 kresults = rot90(kresults);
 imagesc(kresults); colormap(gray); title(int2str(numclusters)); colormap('hot'); colorbar;
+
 %{
 figure('Name', 'City distances')
 subplot(2, rowsize, 1); imagesc(mask); title('Source')
