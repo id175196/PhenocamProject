@@ -71,11 +71,17 @@ function res = getEntropies(img)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 mask = imread(img{1,1});
-res = zeros(size(mask,1),size(mask,2),size(mask,3),size(img,2));
+res = zeros(size(mask,1),size(mask,2),size(img,2));
 
 for n=1:size(img,2);
     imgtemp = imread(img{1,n});
-    [res(:,:,:,n),n,cts] = colorthreshold(imgtemp,'le');
+    red = imgtemp(:,:,1);
+    green = imgtemp(:,:,2);
+    blue = imgtemp(:,:,3);
+    res1 = green./(green + red + blue)*256;%floor(green/(green + red + blue)*256);
+    [k] = otsu(res1);
+    res(:,:,n) = k;
+    %[res(:,:,:,n),n,cts] = colorthreshold(imgtemp,'le');
     %figure; imagesc(out/256); title(img{n});
 end
 
