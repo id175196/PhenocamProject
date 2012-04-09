@@ -22,4 +22,6 @@ end
 %[coeff,score,latent,tsquare] = princomp(r);
 %aww yeah. 
 %testing this comment works.
+%merges should come up here.
+[coeff,score,latent,tsquare] = princomp(r);
 end
