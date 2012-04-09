@@ -10,5 +10,6 @@ for n=1:size(img,4);
         r(:,(n-1)*size(mask,3) + m) = reshape(imgtemp(:,:,m),size(imgtemp,1)*size(imgtemp,2),1);
     end
 end
+%merges should come up here.
 [coeff,score,latent,tsquare] = princomp(r);
 end
