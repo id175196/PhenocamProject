@@ -20,5 +20,6 @@ for n=1:size(img,4);
     
 end
 %[coeff,score,latent,tsquare] = princomp(r);
-%aww yeah.
+%aww yeah. 
+%testing this comment works.
 end
