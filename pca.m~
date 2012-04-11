@@ -1,4 +1,4 @@
-function [coeff,score,latent,tsquare, mask] = pca(img)
+function [coeff,score,latent,tsquare] = pca(img)
 
 mask = img(:,:,:,1);
 r1 = zeros(size(mask,1)*size(mask,2),size(img,4));
@@ -24,11 +24,16 @@ end
 %testing this comment works.
 %merges should come up here.
 [coeff,score,latent,tsquare] = princomp(r1);
+figure
+
+%{
 tempr = reshape(score(:,1),size(mask,1),size(mask,2));
 m2 = max(max(tempr));
 m1 = min(min(tempr));
-mask = ones(size(tempr,1),size(tempr,2));
-mask(tempr < m1 + .6*(m2-m1)) = 0;
+realr = zeros(size(tempr,1),size(tempr,2));
+realr(tempr>= m1 + .6*(m2-m1)) = 1;
 figure
-imagesc(mask);
+imagesc(realr);
+%}
+
 end
