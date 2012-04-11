@@ -1,4 +1,8 @@
 function [coeff,score,latent,tsquare, mask] = pca(img)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% this function makes a mask file of non-vegetative areas given a stack of
+% images.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 mask = img(:,:,:,1);
 r1 = zeros(size(mask,1)*size(mask,2),size(img,4));
@@ -31,4 +35,9 @@ mask = ones(size(tempr,1),size(tempr,2));
 mask(tempr < m1 + .6*(m2-m1)) = 0;
 figure
 imagesc(mask);
+for i = 1:12;
+    tempr = reshape(score(:,i),size(mask,1),size(mask,2));
+    figure
+    imagesc(tempr);
+end
 end
