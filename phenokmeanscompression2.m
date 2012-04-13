@@ -212,14 +212,14 @@ mask = imread(subset_images(1,:));
 results(:,1) = subset_year;
 
 % waitbar settings
-h = waitbar(0,'Please wait...','Name','Processing Images...',...
-            'CreateCancelBtn',...
-            'setappdata(gcbf,''canceling'',1)');     
+%h = waitbar(0,'Please wait...','Name','Processing Images...',...
+%            'CreateCancelBtn',...
+%            'setappdata(gcbf,''canceling'',1)');     
 
 for i=1:size_subset_images;
         
     % Report current estimate in the waitbar's message field
-    waitbar(i/size_subset_images);
+    %waitbar(i/size_subset_images);
     
     % calculate DOY 
     results(i,2) = date2jd(subset_year, subset_month(i), subset_day(i),...
@@ -227,7 +227,7 @@ for i=1:size_subset_images;
 end
 
 % delete wait           disp('we get here;');bar handle when done
-delete(h);
+%delete(h);
 
 % create filter for smoothing
 windowsize = floor(windowsize/2);
@@ -251,7 +251,7 @@ DOY = round(results(:,2));
 
 % now, run window filtering for all days 
 picsadded = 1;
-figure('Name', 'Sample Images Used', 'Position', [0 0 1920 1080])
+%figure('Name', 'Sample Images Used', 'Position', [0 0 1920 1080])
 skip = 1;
 if(windowsize ~= 0)
     skip = 2*windowsize;
@@ -295,7 +295,7 @@ for n=start:skip:max_doy;
             imgs(:,:,:,picsadded) = tempimg;
             s1 = size(tempimg,1);
             s2 = size(tempimg,2);
-            subplot(floor(sqrt(numpics)), ceil(sqrt(numpics)) + 1, picsadded); imagesc(tempimg);
+            %subplot(floor(sqrt(numpics)), ceil(sqrt(numpics)) + 1, picsadded); imagesc(tempimg);
             %title(subset(gccmatn(ceil(size(gccmatn,1)*.9),2),:))
             
             % make sure images have same dimesnsions
@@ -330,7 +330,7 @@ end
 entres = getEntropies(names);
 
 %rowsize = ceil(numclusters/2);
-
+%{
 figure('Name', 'City distances')
 if nargin == 10;
     kresults = kmeans(kmat, numclusters, 'EmptyAction', 'singleton', 'distance', 'city', 'start', sampledata);
@@ -340,22 +340,24 @@ end
 kresults = reshape(kresults,size(img,2)/compression,size(img,1)/compression);
 kresults = fliplr(kresults);
 kresults = rot90(kresults);
-imagesc(kresults); colormap(gray); title(int2str(numclusters)); colormap('hot'); colorbar;
+%imagesc(kresults); colormap(gray); title(int2str(numclusters)); colormap('hot'); colorbar;
+%}
 
-%{
-figure('Name', 'City distances')
-subplot(2, rowsize, 1); imagesc(mask); title('Source')
+%figure('Name', 'City distances')
+%subplot(2, rowsize, 1); imagesc(mask); title('Source')
+kresults = zeros(size(img,1)/compression,size(img,2)/compression,numclusters -1);
 for val = 2:numclusters;
-    disp(strcat('Kmeans cluster size: ', int2str(val)));
+    %disp(strcat('Kmeans cluster size: ', int2str(val)));
     if nargin == 10;
-        kresults = kmeans(kmat, val, 'EmptyAction', 'singleton', 'distance', 'city', 'start', sampledata);
+        krs = kmeans(kmat, val, 'EmptyAction', 'singleton', 'distance', 'city', 'start', sampledata);
     else
-        kresults = kmeans(kmat, val, 'EmptyAction', 'singleton', 'distance', 'city', 'replicate', 5);
+        krs = kmeans(kmat, val, 'EmptyAction', 'singleton', 'distance', 'city', 'replicate', 5);
     end
-    kresults = reshape(kresults,size(img,2)/compression,size(img,1)/compression);
-    kresults = fliplr(kresults);
-    kresults = rot90(kresults);
-    subplot(2, rowsize, val); imagesc(kresults); colormap(gray); title(int2str(numclusters)); colormap('hot'); colorbar;
+    krs = reshape(krs,size(img,2)/compression,size(img,1)/compression);
+    krs = fliplr(krs);
+    krs = rot90(krs);
+    kresults(:,:,val-1) = krs;
+    %subplot(2, rowsize, val); imagesc(kresults); colormap(gray); title(int2str(numclusters)); colormap('hot'); colorbar;
     %dlmwrite([int2str(val) 'clusters.txt'], kresults);
 end
 %}

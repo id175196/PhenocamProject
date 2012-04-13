@@ -33,11 +33,14 @@ m2 = max(max(tempr));
 m1 = min(min(tempr));
 mask = ones(size(tempr,1),size(tempr,2));
 mask(tempr < m1 + .6*(m2-m1)) = 0;
-figure
-imagesc(mask);
+%figure
+%imagesc(mask);
+%% commented out for supercomputer run.
+%{
 for i = 1:12;
     tempr = reshape(score(:,i),size(mask,1),size(mask,2));
     figure
     imagesc(tempr);
 end
+%}
 end

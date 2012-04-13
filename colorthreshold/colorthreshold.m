@@ -1,5 +1,3 @@
-
-
 function [out,n,cts] = colorthreshold(im,thresholdmethod)
 
 %COLORTHRESHOLD thresholds color images. Please read Dr. Yingzi (Eliza)
