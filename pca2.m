@@ -17,8 +17,8 @@ end
 r(isnan(r) | r == Inf) = 0;
 [coeff,score,latent,tsquare] = princomp(r);
 tempr = reshape(score(:,1),size(mask,1),size(mask,2));
-realr = zeros(size(tempr,1),size(tempr,2));
-realr(tempr <= 0) = 1;
+mask = zeros(size(tempr,1),size(tempr,2));
+mask(tempr <= 0) = 1;
 figure
-imagesc(realr); colorbar;
+imagesc(mask); colorbar;
 end

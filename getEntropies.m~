@@ -17,9 +17,7 @@ function res = getEntropies(img)
 %       This use of the function takes the image
 %       c:\data\harvard\2009\01_01_0837.jpg and runs an entropy on it.
 %
-% Uses the colorentropy functions, written by Y. Du,; C. Chang, and P.D.
-% Thouin for their work "An Unsupervised Approach to Color Video
-% Thresholding", Optical Engineering, Vol. 43, No. 2, 282-289, (2004).
+% Uses the colorentropy functions, written by 
 %
 % Matlab function file written by Dmitri Ilushin, dilushin@college.harvard.edu,
 % February 14, 2012

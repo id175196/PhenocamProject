@@ -23,10 +23,6 @@ for n=1:size(img,4);
     r1(:,n) = score(:,1);
     
 end
-%[coeff,score,latent,tsquare] = princomp(r);
-%aww yeah. 
-%testing this comment works.
-%merges should come up here.
 [coeff,score,latent,tsquare] = princomp(r1);
 tempr = reshape(score(:,1),size(mask,1),size(mask,2));
 m2 = max(max(tempr));
