@@ -1,0 +1,15 @@
+function bwim = getnva(skymask,im)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This function makes a binary image containing non-vegetative areas
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+s = size(skymask,1)*size(skymask,2);
+figure();
+imagesc(im);
+im = majorityfilter(im + 1,3) - 1;
+figure();
+imagesc(im);
+filled = ~(bwareaopen(im,ceil(s/00)));
+figure();
+imagesc(filled);
+[r,c] = find(skymask & ~filled);
+bwim = ~(imfill(filled,[r,c]));
