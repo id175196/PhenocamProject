@@ -1,7 +1,11 @@
 function [coeff,score,latent,tsquare, res] = pcafilters(img, mask)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% this function makes a mask file of non-vegetative areas given a stack of
-% images.
+% this function runs a pca filter on areas not included in mask.
+% Syntax:
+%    [coeff,score,latent,tsquare, res] = pcafilters(img, mask)
+%        img = stack of images to run filters on
+%        mask = binary mask where not to consider data
+%                
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 res = img(:,:,:,1);

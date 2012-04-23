@@ -1,56 +1,19 @@
 function runphenokmeans(indir)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This code runs the pheno kmeans, pca, and entropy functions on a
-% directory containing sites that contain years of data.  The variables are
-% the same as for a phenokmeans, so I will leave the syntax of phenokmeans
-% below for now.
-%
+% directory containing sites that contain years of image data.  
+
 % SYNTAX:
-%     phenokmeanscompression(indir,outdir,windowsize)
-%         indir = input directory with images (JPEG only)
-%         outdir = output directory where kmeans results will be written
-%         windowsize = window size in days
-%
-%     phenokmeanscompression(indir,outdir,windowsize,sttime,endtime)
-%         indir = input directory with images (JPEG only) and mask
-%         outdir = output directory where ASCII results will be written
-%         windowsize = window size in days
-%         sttime, endtime = starting and ending hour for processing images,
-%                                       default is 7h00 and 17h00
-%     phenokmeanscompression(indir,outdir,windowsize,sttime,endtime, threshold)
-%         indir = input directory with images (JPEG only) and mask
-%         outdir = output directory where ASCII results will be written
-%         windowsize = window size in days
-%         sttime, endtime = starting and ending hour for processing images,
-%                                       default is 7h00 and 17h00
-%         threshold = threshold of mean blue/red/green color values to be
-%                considered.
-%     phenokmeanscompression(indir,outdir,windowsize,sttime,endtime,...
-%                            threshold, numclusters, numpics)
-%         indir = input directory with images (JPEG only) and mask
-%         outdir = output directory where ASCII results will be written
-%         windowsize = window size in days
-%         sttime, endtime = starting and ending hour for processing images,
-%                                       default is 7h00 and 17h00
-%         threshold = threshold of mean blue/red/green color values to be
-%                considered.
-%         numclusters = the number of clusters to create with kmeans. 
-%                default is 6.
-%         numpics = the number of pictures to be used for kmeans.  default
-%         is 10.
-%
-%     
+%     runphenokmeans(indir)
+%         indir = input directory of sites that contains a directory of 
+%             images per year (JPEG only)
 %
 % EXAMPLE:
-%     phenokmeanscompression('C:\data\harvard\2009','C:\data\harvard',
-%     3)
+%     runphenokmeans('C:\data\')
 %       This use of the function finds images in
-%       'C:\data\harvard\2009', outputs to 'C:\data\harvard\', uses the
-%       kmeans function on this information; the window size for smoothing is 3
-%       days.
+%       'C:\data\', outputs to 'C:\data\', using the
+%       kmeans function.
 %
-% Original code written by Koen Hufkens, khufkens@bu.edu, Sept. 2011,
-% published under a GPLv2 license and is free to redistribute.
 %
 % Matlab function file written by Dmitri Ilushin, dilushin@college.harvard.edu,
 % February 14, 2012
@@ -62,6 +25,8 @@ dirIndex = [dirData.isdir];  %# Find the index for directories
 subDirs = {dirData(dirIndex).name};  %# Get a list of the subdirectories
 validIndex = ~ismember(subDirs,{'.','..'});  %# Find index of subdirectories
                                            %#   that are not '.' or '..'
+%get current location
+curloc = pwd;
 %% run codes and store in given directory
 for iDir = find(validIndex)                  %# Loop over valid subdirectories
     nextDir = fullfile(indir,subDirs{iDir});    %# Get the subdirectory path
@@ -73,6 +38,7 @@ for iDir = find(validIndex)                  %# Loop over valid subdirectories
     validIndex2 = ~ismember(subDirs2,{'.','..'});  %# Find index of subdirectories
                                                %#   that are not '.' or '..'
     for iDir2 = find(validIndex2)
+        cd(curloc);
         year_dir = fullfile(nextDir,subDirs2{iDir2});    %# Get the subdirectory path
         disp(year_dir);
         [imgs,kmat,kresults,entres] = phenokmeanscompression2(year_dir,year_dir,...
