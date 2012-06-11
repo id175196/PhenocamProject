@@ -143,11 +143,11 @@ if isempty(jpeg_files)
 else
 
     % define containing matrices for year/month/day/hour/min variables
-    year = zeros(nrjpegs,1);
-    month = zeros(nrjpegs,1);
-    day = zeros(nrjpegs,1);
-    hour = zeros(nrjpegs,1);
-    minutes = zeros(nrjpegs,1);
+    year = zeros(nrjpegs,1,'int16');
+    month = zeros(nrjpegs,1,'int8');
+    day = zeros(nrjpegs,1,'int8');
+    hour = zeros(nrjpegs,1,'int8');
+    minutes = zeros(nrjpegs,1,'int8');
 
     % extract date/time values from filename using string manipulation
     for i=1:nrjpegs
@@ -241,7 +241,7 @@ threshold = 255*(threshold/100);
 
 % create the matrix to hold image data for kmeans
 %disp(size(mask,1)*size(mask,2)*3*(l - start)/1024/1024);
-kmat = zeros(size(mask,1)*size(mask,2)/compression/compression,numpics*size(mask,3));
+kmat = zeros(size(mask,1)*size(mask,2)/compression/compression,numpics*size(mask,3),'uint8');
 kindex = 1;
 
 imgs = zeros(size(mask,1),size(mask,2),size(mask,3),numpics);
@@ -268,9 +268,9 @@ for n=start:skip:max_doy;
         % if windowsize <= 1, then impose window
         else
             correctindexes = DOY;
-            correctindexes(correctindexes >= n -windowsize & correctindexes <= n +windowsize) = -1;
-            correctindexes(correctindexes > n +windowsize | correctindexes <...
-                n -windowsize & correctindexes ~= -1) = -2;
+            correctindexes(correctindexes >= n -windowsize && correctindexes <= n +windowsize) = -1;
+            correctindexes(correctindexes > n +windowsize || correctindexes <...
+                n -windowsize && correctindexes ~= -1) = -2;
         end
         subset = subset_images(correctindexes == -1, :);
         gccmat = zeros(size(subset,1),3);
